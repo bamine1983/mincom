@@ -1,8 +1,9 @@
 <?php
 include('lib/nusoap.php');
-$serverpath ='http://www.nusoap.dev/serveur.php';
+$serverpath ='http://localhost/phoneapps/mincomws/serveur.php';
 $client = new nusoap_client($serverpath);
-$items = $client->call('getContent');
+$params=array("prenom"=>"sdfsdfsdf");
+$items = $client->call('getContent',$params);
 
 if($client->fault){
    echo "Error: <p>Code: (".$client->faultcode.")</p>";
