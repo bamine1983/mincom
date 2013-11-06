@@ -15,8 +15,8 @@ $server->register('hello',
     'Says hello to the caller'
 );
 
-function hello($catid) {
-    $sql = "SELECT id, title FROM pzt_k2_items WHERE catid=".$catid." LIMIT 0,10";
+function hello($catid, $limit=100) {
+    $sql = "SELECT id, title FROM pzt_k2_items WHERE catid=".$catid." LIMIT 0,".$limit;
 	$result	= mysql_query($sql);
 	$items = array();
 	while($r = mysql_fetch_object($result)){				

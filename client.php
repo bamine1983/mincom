@@ -11,7 +11,7 @@ $client = new soapclient(
 		)
 	);
 
-$result = $client->__call('hello', array(1));
+$result = $client->__call('hello', array(1, 10));
 echo "<pre>";print_r($result);
 
 /* echo "<pre>\n";
@@ -21,6 +21,6 @@ echo "Request :\n".htmlspecialchars($client ->__getLastRequest()) ."\n";
 //(souvent le message d'erreur produit dans le script du serveur 
 //que tu ne voies pas)
 echo "Response:\n".htmlspecialchars($client ->__getLastResponse())."\n";
-echo "</pre>"; */
+echo "</pre>";  */
 
 ?>
