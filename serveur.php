@@ -1,23 +1,30 @@
 <?php
-include('lib/nusoap.php');
-$serveur = new nusoap_server;
-$serveur->register('getContent');
-
-function getContent($prenom){
-	$conn = mysql_connect('localhost','root','');
-	mysql_select_db('mincom', $conn);
+require_once('lib/nusoap.php');
+$conn = mysql_connect('localhost','root','');
+mysql_select_db('mincom', $conn);
 	
-	$sql = "SELECT * FROM pzt_k2_items WHERE catid=1";
-	$q	= mysql_query($sql);
-	while($r = mysql_fetch_array($q)){
-		$items[] = array('id'=>$r['id'],
-				'title'=>$r['title'],
-				'intro'=>$r['introtext'],
-				'created'=>$r['created']
-			); 
+$server = new soap_server();
+$server->configureWSDL('hellowsdl', 'urn:hellowsdl');
+$server->register('hello',
+    array('name' => 'xsd:string'),
+    array('return' => 'SOAP-ENC:Array'),    
+    'urn:hellowsdl',                
+    'urn:hellowsdl#hello',          
+    'rpc',                          
+    'encoded',                      
+    'Says hello to the caller'
+);
+
+function hello($catid) {
+    $sql = "SELECT id, title FROM pzt_k2_items WHERE catid=".$catid." LIMIT 0,10";
+	$result	= mysql_query($sql);
+	$items = array();
+	while($r = mysql_fetch_object($result)){				
+		$items[] = array('id'=> $r->id, 'title'=>$r->title); 		
 	}
 	return $items;
 }
-$serveur->service($HTTP_RAW_POST_DATA);
-exit();
+
+$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+$server->service($HTTP_RAW_POST_DATA);
 ?>
